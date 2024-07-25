@@ -1,12 +1,21 @@
 # outputs.py
 from prettytable import PrettyTable
-from constants import BASE_DIR
+from constants import BASE_DIR, DATETIME_FORMAT
+import datetime as dt
+import csv
 
 
 def file_output(results, cli_args):
     results_dir = BASE_DIR / 'results'
     results_dir.mkdir(exist_ok=True)
-    pass
+    parser_mode = cli_args.mode
+    now = dt.datetime.now()
+    now_formatted = now.strftime(DATETIME_FORMAT)
+    file_name = f'{parser_mode}_{now_formatted}.csv'
+    file_path = results_dir / file_name
+    with open(file_path, 'w', encoding='utf-8') as f:
+        writer = csv.writer(f, dialect='unix')
+        writer.writerows(results)
 
 
 def control_output(results, cli_args):
